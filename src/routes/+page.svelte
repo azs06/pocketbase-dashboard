@@ -8,6 +8,7 @@
 	const onAccessDashboard = () => {
 		window.location.href = '/dashboard';
 	};
+  console.log('Current user:', $currentUser);
 </script>
 
 <div class="space-y-6 items-center justify-center flex flex-col">
