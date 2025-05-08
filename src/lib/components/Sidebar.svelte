@@ -60,7 +60,7 @@
 				</a>
 			</li>
 			<li>
-				<a href="/settings" class="flex items-center p-2 rounded-md hover:bg-indigo-700">
+				<a href="/" class="flex items-center p-2 rounded-md hover:bg-indigo-700">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="h-5 w-5"
@@ -77,7 +77,7 @@
 				</a>
 			</li>
 			<li>
-				<a href="/settings" class="flex items-center p-2 rounded-md hover:bg-indigo-700">
+				<a href="/" class="flex items-center p-2 rounded-md hover:bg-indigo-700">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="h-5 w-5"
@@ -94,7 +94,7 @@
 				</a>
 			</li>
 			<li>
-				<a href="/settings" class="flex items-center p-2 rounded-md hover:bg-indigo-700">
+				<a href="/" class="flex items-center p-2 rounded-md hover:bg-indigo-700">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="h-5 w-5"
@@ -112,7 +112,7 @@
 			</li>
 			<li>
 				<a
-					href="/logout"
+					href="/"
 					onclick={logout}
 					class="flex items-center p-2 rounded-md hover:bg-indigo-700"
 				>
