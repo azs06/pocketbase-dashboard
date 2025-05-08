@@ -1,7 +1,6 @@
 <!-- Login.svelte -->
 <script lang="ts">
 	import { pb } from '$lib/pocketbase';
-	let username = $state('');
 	let password = $state('');
 	let isLoggedIn = $state(false);
 	let errorMessage = $state('');
@@ -10,7 +9,7 @@
 	let email = $state('');
 	let rememberMe = $state(false);
 	let isLoading = $state(false);
-    let isValid = $state(true);
+	let isValid = $state(true);
 
 	const login = async (event: Event) => {
 		event.preventDefault();
@@ -23,28 +22,20 @@
 		}
 
 		try {
-			const authData = await pb.collection('users').authWithPassword(username, password);
-			console.log('Auth data:', authData);
+			isLoading = true;
+			await pb.collection('users').authWithPassword(email, password);
 			if (pb.authStore.isValid) {
-				console.log('Login successful:', authData);
 				isLoggedIn = true;
-				// Redirect or perform further actions
 			} else {
 				console.error('Login failed:');
 			}
 		} catch (error) {
 			console.error('Error during login:', error);
+		} finally {
+			isLoading = false;
 		}
 	};
-	const logout = async () => {
-		try {
-			await pb.authStore.clear();
-			isLoggedIn = false;
-			console.log('Logged out successfully');
-		} catch (error) {
-			console.error('Error during logout:', error);
-		}
-	};
+
 	const resetPassword = async () => {
 		try {
 			await pb.collection('users').requestPasswordReset(email);
@@ -61,13 +52,7 @@
 </script>
 
 <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
-	{#if errorMessage}
-		<div class="bg-red-50 text-red-700 p-4 rounded-md text-sm">
-			{errorMessage}
-		</div>
-	{/if}
-
-	<form class="mt-8 space-y-6" onsubmit={login}>
+	<form class="mt-8 space-y-6 {isLoggedIn ? 'hidden' : ''}" onsubmit={login}>
 		<div class="rounded-md -space-y-px">
 			<div class="mb-4">
 				<label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label

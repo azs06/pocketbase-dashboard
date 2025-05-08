@@ -1,8 +1,20 @@
 <script lang="ts">
+	import { pb } from '$lib/pocketbase';
+	import { goto } from '$app/navigation';
 	let isSidebarOpen = $state(true);
 
 	const toggleSidebar = () => {
 		isSidebarOpen = !isSidebarOpen;
+	};
+	const logout = async (e) => {
+		e.preventDefault();
+		try {
+			await pb.authStore.clear();
+			goto('/');
+			console.log('Logged out successfully');
+		} catch (error) {
+			console.error('Error during logout:', error);
+		}
 	};
 </script>
 
@@ -13,7 +25,7 @@
 >
 	<div class="flex items-center justify-between p-4 border-b border-indigo-700">
 		<h2 class={isSidebarOpen ? 'text-xl font-bold' : 'hidden'}>Dashboard</h2>
-		<button on:click={toggleSidebar} class="p-1 rounded-md hover:bg-indigo-700 focus:outline-none">
+		<button aria-label="toggle-sidebar" onclick={toggleSidebar} class="p-1 rounded-md hover:bg-indigo-700 focus:outline-none">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="h-6 w-6"
@@ -96,6 +108,15 @@
 						/>
 					</svg>
 					<span class={isSidebarOpen ? 'ml-3' : 'hidden'}>Settings</span>
+				</a>
+			</li>
+			<li>
+				<a
+					href="/logout"
+					onclick={logout}
+					class="flex items-center p-2 rounded-md hover:bg-indigo-700"
+				>
+					<span class={isSidebarOpen ? 'ml-3' : 'hidden'}>Logout</span>
 				</a>
 			</li>
 		</ul>
