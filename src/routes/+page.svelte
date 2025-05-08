@@ -1,12 +1,14 @@
 <script>
 	import LoginRedux from '$lib/components/LoginRedux.svelte';
 	import { currentUser } from '$lib/pocketbase';
+  import { goto } from '$app/navigation';
 
 	if ($currentUser) {
 		// Redirect to dashboard or home page
 	}
 	const onAccessDashboard = () => {
-		window.location.href = '/dashboard';
+		//window.location.href = '/dashboard';
+    goto('/dashboard');
 	};
   console.log('Current user:', $currentUser);
 </script>
