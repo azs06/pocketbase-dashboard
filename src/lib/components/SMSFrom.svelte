@@ -68,7 +68,7 @@
         <div class="flex items-center">
           <label
             for="csvUpload"
-            class="flex items-center px-4 py-2 bg-gray-100  rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"
+            class="flex items-center px-4 py-2 bg-gray-100  rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-blue-700"
           >
             <Upload class="w-4 h-4 mr-2" />
             Import from CSV
