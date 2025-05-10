@@ -28,55 +28,8 @@
   </script>
   
   <div class="space-y-6">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {#each stats as { title, value, change, trend }}
-        <div class="bg-white p-6 rounded-lg shadow-sm">
-          <div class="text-sm font-medium text-gray-500">{title}</div>
-          <div class="mt-2 flex items-baseline">
-            <div class="text-2xl font-semibold text-gray-900">{value}</div>
-            <div class="ml-2 flex items-center text-sm font-medium {trend === 'up' ? 'text-green-600' : 'text-red-600'}">
-              {change}
-              <svg 
-                class="self-center flex-shrink-0 h-5 w-5 {trend === 'up' ? 'text-green-500' : 'text-red-500'}"
-                xmlns="http://www.w3.org/2000/svg" 
-                viewBox="0 0 20 20" 
-                fill="currentColor" 
-                aria-hidden="true"
-              >
-                <path 
-                  fill-rule="evenodd" 
-                  d={trend === 'up' 
-                    ? "M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" 
-                    : "M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z"} 
-                  clip-rule="evenodd" 
-                />
-              </svg>
-            </div>
-          </div>
-        </div>
-      {/each}
-    </div>
-  
     <!-- Charts section -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <!-- Sales Chart -->
-      <div class="bg-white p-6 rounded-lg shadow-sm">
-        <h3 class="text-lg font-medium text-gray-900">Monthly Sales</h3>
-        <div class="mt-6" style="height: 300px;">
-          <div class="flex h-full items-end">
-            {#each chartData as { month, sales }, i}
-              <div class="flex-1 flex flex-col items-center">
-                <div 
-                  class="w-full max-w-[30px] bg-indigo-600 rounded-t" 
-                  style="height: {(sales / maxSales * 100) * 2}px;"
-                ></div>
-                <div class="text-xs text-gray-500 mt-2">{month}</div>
-              </div>
-            {/each}
-          </div>
-        </div>
-      </div>
-  
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">  
       <!-- Recent Activity -->
       <div class="bg-white p-6 rounded-lg shadow-sm">
         <h3 class="text-lg font-medium text-gray-900">Recent Activity</h3>
