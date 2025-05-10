@@ -6,7 +6,7 @@
   <div class="flex h-screen items-center justify-center bg-gray-100">
 	<div class="flex-1 overflow-auto">  
 	  <!-- Page content -->
-	  <main class="p-6">
+	  <main>
 		{@render children()}
 	  </main>
 	</div>

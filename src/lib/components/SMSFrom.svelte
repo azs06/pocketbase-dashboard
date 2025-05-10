@@ -96,7 +96,7 @@
       <div class="text-right text-xs text-gray-500">{message.length} characters</div>
     </div>
   
-    <button type="submit" class="w-full bg-blue-500 p-4 text-white font-semibold" disabled={loading}>
+    <button type="submit" class="w-full bg-blue-500 p-4 text-white font-semibold    " disabled={loading}>
       {loading ? 'Sending...' : 'Send SMS'}
     </button>
   </form>
