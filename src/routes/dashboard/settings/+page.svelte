@@ -1,18 +1,44 @@
-<script>
-	// Sample user data
+<script lang="ts">
+	import { currentUser, pb } from '$lib/pocketbase';
+
+	// User profile data from PocketBase
 	let userProfile = $state({
-		name: 'John Doe',
-		email: 'john.doe@example.com',
-		role: 'Administrator',
-		avatar:
-			'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+		name: '',
+		email: '',
+		avatar: ''
 	});
 
-	// Sample settings
+	let isSaving = $state(false);
+	let saveError = $state('');
+
+	// Get avatar URL helper
+	function getAvatarUrl() {
+		console.log('Current User:', $currentUser); // Debug log
+		if ($currentUser?.avatar && $currentUser?.id) {
+			// Construct the file URL manually using the PocketBase URL
+			const pbUrl = import.meta.env.VITE_PB_URL;
+			// Use 'users' directly as the collection name since this is the users collection
+			const avatarUrl = `${pbUrl}/api/files/users/${$currentUser.id}/${$currentUser.avatar}`;
+			console.log('Avatar URL:', avatarUrl); // Debug log
+			return avatarUrl;
+		}
+		// Generate avatar with user's initials
+		return `https://ui-avatars.com/api/?name=${encodeURIComponent($currentUser?.name || 'User')}&background=4F46E5&color=fff&size=128`;
+	}
+
+	// Initialize user profile data from PocketBase
+	$effect(() => {
+		if ($currentUser) {
+			userProfile.name = $currentUser.name || '';
+			userProfile.email = $currentUser.email || '';
+			userProfile.avatar = getAvatarUrl();
+		}
+	});
+
+	// Sample settings (these could be stored in PocketBase as well)
 	let notifications = $state({
 		email: true,
-		push: false,
-		sms: false
+		push: false
 	});
 
 	let displaySettings = $state({
@@ -27,14 +53,43 @@
 		ipRestriction: false
 	});
 
-	// Simulated save function
-	function saveSettings() {
-		// In a real app, this would save to a backend
-		const saveNotification = document.getElementById('save-notification');
-		saveNotification.classList.remove('opacity-0');
-		setTimeout(() => {
-			saveNotification.classList.add('opacity-0');
-		}, 3000);
+	// Save function that updates PocketBase
+	async function saveSettings() {
+		if (!$currentUser) return;
+
+		isSaving = true;
+		saveError = '';
+
+		try {
+			// Update user profile in PocketBase
+			await pb.collection('users').update($currentUser.id, {
+				name: userProfile.name,
+				email: userProfile.email
+			});
+
+			// Show success notification
+			const saveNotification = document.getElementById('save-notification');
+			if (saveNotification) {
+				saveNotification.classList.remove('opacity-0');
+				setTimeout(() => {
+					saveNotification.classList.add('opacity-0');
+				}, 3000);
+			}
+		} catch (error: any) {
+			console.error('Error saving settings:', error);
+			saveError = error.message || 'Failed to save settings';
+
+			// Show error notification
+			const errorNotification = document.getElementById('error-notification');
+			if (errorNotification) {
+				errorNotification.classList.remove('opacity-0');
+				setTimeout(() => {
+					errorNotification.classList.add('opacity-0');
+				}, 5000);
+			}
+		} finally {
+			isSaving = false;
+		}
 	}
 </script>
 
@@ -48,12 +103,16 @@
 			<div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
 				<div class="sm:col-span-6 flex items-center">
 					<div class="mr-4">
-						<img class="h-16 w-16 rounded-full" src={userProfile.avatar} alt="Profile" />
+						<img
+							class="h-16 w-16 rounded-full object-cover bg-gray-200"
+							src={userProfile.avatar}
+							alt="Profile"
+							onerror={(e) => { e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent($currentUser?.name || 'User')}&background=4F46E5&color=fff&size=128`; }}
+						/>
 					</div>
 					<div>
-						<div class="text-sm font-medium text-gray-700">{userProfile.name}</div>
+						<div class="text-sm font-medium text-gray-700">{userProfile.name || 'User'}</div>
 						<div class="text-sm text-gray-500">{userProfile.email}</div>
-						<div class="text-sm text-gray-500">{userProfile.role}</div>
 					</div>
 				</div>
 
@@ -124,24 +183,6 @@
 							>Push notifications</label
 						>
 						<p class="text-gray-500">Receive push notifications in your browser</p>
-					</div>
-				</div>
-
-				<div class="flex items-start">
-					<div class="flex items-center h-5">
-						<input
-							id="sms-notifications"
-							name="sms-notifications"
-							type="checkbox"
-							bind:checked={notifications.sms}
-							class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-						/>
-					</div>
-					<div class="ml-3 text-sm">
-						<label for="sms-notifications" class="font-medium text-gray-700"
-							>SMS notifications</label
-						>
-						<p class="text-gray-500">Get text message notifications for critical alerts</p>
 					</div>
 				</div>
 			</div>
@@ -267,14 +308,23 @@
 	<div class="flex justify-end">
 		<button
 			type="button"
-			on:click={saveSettings}
-			class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+			onclick={saveSettings}
+			disabled={isSaving}
+			class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
 		>
-			Save Settings
+			{#if isSaving}
+				<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+					<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+					<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+				</svg>
+				Saving...
+			{:else}
+				Save Settings
+			{/if}
 		</button>
 	</div>
 
-	<!-- Save notification -->
+	<!-- Success notification -->
 	<div
 		id="save-notification"
 		class="fixed bottom-4 right-4 bg-green-50 p-4 rounded-md border border-green-200 shadow-md opacity-0 transition-opacity duration-300"
@@ -296,6 +346,32 @@
 			</div>
 			<div class="ml-3">
 				<p class="text-sm font-medium text-green-800">Settings saved successfully</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Error notification -->
+	<div
+		id="error-notification"
+		class="fixed bottom-4 right-4 bg-red-50 p-4 rounded-md border border-red-200 shadow-md opacity-0 transition-opacity duration-300"
+	>
+		<div class="flex">
+			<div class="flex-shrink-0">
+				<svg
+					class="h-5 w-5 text-red-400"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 20 20"
+					fill="currentColor"
+				>
+					<path
+						fill-rule="evenodd"
+						d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+						clip-rule="evenodd"
+					/>
+				</svg>
+			</div>
+			<div class="ml-3">
+				<p class="text-sm font-medium text-red-800">{saveError || 'Failed to save settings'}</p>
 			</div>
 		</div>
 	</div>

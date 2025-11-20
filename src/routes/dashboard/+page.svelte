@@ -34,62 +34,13 @@
       <div class="bg-white p-6 rounded-lg shadow-sm">
         <h3 class="text-lg font-medium text-gray-900">Recent Activity</h3>
         <div class="mt-6 flow-root">
-          <ul class="-my-5 divide-y divide-gray-200">
-            <li class="py-4">
-              <div class="flex items-center space-x-4">
-                <div class="flex-shrink-0">
-                  <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-green-100">
-                    <svg class="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                    </svg>
-                  </span>
-                </div>
-                <div class="min-w-0 flex-1">
-                  <p class="text-sm font-medium text-gray-900">New order received</p>
-                  <p class="text-sm text-gray-500">Order #12345 - $230.00</p>
-                </div>
-                <div>
-                  <span class="text-xs text-gray-500">2m ago</span>
-                </div>
-              </div>
-            </li>
-            <li class="py-4">
-              <div class="flex items-center space-x-4">
-                <div class="flex-shrink-0">
-                  <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-blue-100">
-                    <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                      <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                    </svg>
-                  </span>
-                </div>
-                <div class="min-w-0 flex-1">
-                  <p class="text-sm font-medium text-gray-900">User feedback received</p>
-                  <p class="text-sm text-gray-500">Jane Smith left a 5-star review</p>
-                </div>
-                <div>
-                  <span class="text-xs text-gray-500">12m ago</span>
-                </div>
-              </div>
-            </li>
-            <li class="py-4">
-              <div class="flex items-center space-x-4">
-                <div class="flex-shrink-0">
-                  <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-yellow-100">
-                    <svg class="h-5 w-5 text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9a1 1 0 00-1-1z" clip-rule="evenodd" />
-                    </svg>
-                  </span>
-                </div>
-                <div class="min-w-0 flex-1">
-                  <p class="text-sm font-medium text-gray-900">Inventory alert</p>
-                  <p class="text-sm text-gray-500">Product "Widget XL" is low on stock</p>
-                </div>
-                <div>
-                  <span class="text-xs text-gray-500">1h ago</span>
-                </div>
-              </div>
-            </li>
-          </ul>
+          <div class="text-center py-12">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">No recent activity</h3>
+            <p class="mt-1 text-sm text-gray-500">Activity will appear here once you start using the dashboard.</p>
+          </div>
         </div>
       </div>
     </div>
